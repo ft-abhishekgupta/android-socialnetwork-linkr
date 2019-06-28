@@ -8,7 +8,6 @@
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appBarLayout2"
-        app:layout_constraintBottom_toBottomOf="parent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:theme="@style/AppTheme.AppBarOverlay">
@@ -35,7 +34,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/appBarLayout2"
-        app:layout_constraintTop_toBottomOf="@+id/appBarLayout2">
+        app:layout_constraintTop_toTopOf="@+id/appBarLayout2">
     </android.support.v4.view.ViewPager>
 
 </android.support.constraint.ConstraintLayout>

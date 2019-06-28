@@ -6,7 +6,6 @@
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/friend_list"
-        app:layout_constraintBottom_toBottomOf="parent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"

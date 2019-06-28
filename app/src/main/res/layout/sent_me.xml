@@ -29,7 +29,7 @@
         android:layout_height="wrap_content"
         android:textSize="12sp"
         android:layout_marginRight="4dp"
-        app:layout_constraintBottom_toBottomOf="@+id/text_byMe"
+        app:layout_constraintBottom_toTopOf="@+id/text_byMe"
         app:layout_constraintRight_toLeftOf="@+id/text_byMe" />
 
 </android.support.constraint.ConstraintLayout>
