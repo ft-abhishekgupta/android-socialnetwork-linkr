@@ -10,7 +10,7 @@ Linkr is committed to help users "share life and stay touched" anytime, anywhere
 1. Any update in a profile are automatically reflected to all the connections corresponding to that profile and consistency is maintained.
 1. Keep it easy to use and light weight
 
-![](./images/highleveldesign.png)
+![](./images/highleveldesign.PNG)
 
 # Features :
 * Google Authentication
