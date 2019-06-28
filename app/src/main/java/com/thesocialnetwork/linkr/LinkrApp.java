@@ -27,16 +27,17 @@ public class LinkrApp extends Application {
 
         mAuth = FirebaseAuth.getInstance();
 
-        if(mAuth.getCurrentUser() != null) {
+        if (mAuth.getCurrentUser() != null) {
 
-            mUserDatabase = FirebaseDatabase.getInstance().getReference().child("usersProfile").child(mAuth.getCurrentUser().getUid());
+            mUserDatabase = FirebaseDatabase.getInstance().getReference().child("usersProfile")
+                    .child(mAuth.getCurrentUser().getUid());
             mUserDatabase.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
 
                     if (dataSnapshot != null) {
 
-                        Long tsLong = System.currentTimeMillis()/1000;
+                        Long tsLong = System.currentTimeMillis() / 1000;
                         String timestamp = tsLong.toString();
                         mUserDatabase.child("profile_online_status").onDisconnect().setValue(timestamp);
 
@@ -51,7 +52,6 @@ public class LinkrApp extends Application {
             });
 
         }
-
 
     }
 }

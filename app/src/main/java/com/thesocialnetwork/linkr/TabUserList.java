@@ -12,37 +12,35 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
 import java.util.ArrayList;
 
-public class TabUserList extends Fragment{
+public class TabUserList extends Fragment {
 
     RecyclerView rv;
     View mMainView;
     LinearLayoutManager layoutManager;
     AdapterUserList adapterUserList;
-    ArrayList<ModelUserProfile> arrayList=new ArrayList<>();
+    ArrayList<ModelUserProfile> arrayList = new ArrayList<>();
     DatabaseReference db_userProfile;
     String UserId;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
 
-        mMainView= inflater.inflate(R.layout.user_list, container, false);
+        mMainView = inflater.inflate(R.layout.user_list, container, false);
         setHasOptionsMenu(true);
-        rv=mMainView.findViewById(R.id.user_list);
+        rv = mMainView.findViewById(R.id.user_list);
         rv.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(mMainView.getContext());
         rv.setLayoutManager(layoutManager);
-        UserId=FirebaseAuth.getInstance().getCurrentUser().getUid();
-        db_userProfile=FirebaseDatabase.getInstance().getReference().child("usersProfile");
+        UserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        db_userProfile = FirebaseDatabase.getInstance().getReference().child("usersProfile");
         db_userProfile.keepSynced(true);
         return mMainView;
     }
@@ -51,7 +49,7 @@ public class TabUserList extends Fragment{
     public void onResume() {
         super.onResume();
 
-        adapterUserList=new AdapterUserList(mMainView.getContext(),fetch());
+        adapterUserList = new AdapterUserList(mMainView.getContext(), fetch());
         rv.setAdapter(adapterUserList);
     }
 
@@ -102,11 +100,9 @@ public class TabUserList extends Fragment{
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 arrayList.clear();
-                for (DataSnapshot ds : dataSnapshot.getChildren())
-                {
-                    if(!ds.getKey().equals(UserId))
-                    {
-                        ModelUserProfile model=ds.getValue(ModelUserProfile.class);
+                for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                    if (!ds.getKey().equals(UserId)) {
+                        ModelUserProfile model = ds.getValue(ModelUserProfile.class);
                         arrayList.add(model);
                     }
                 }

@@ -14,17 +14,21 @@ public class ModelDetailedInfo {
     public ModelDetailedInfo() {
     }
 
-    public ModelDetailedInfo(String key,String data, String privacy, String type) {
+    public ModelDetailedInfo(String key, String data, String privacy, String type) {
 
-        this.key=key;
+        this.key = key;
         this.data = data;
         this.type = type;
         this.privacy = privacy;
     }
 
-    public void setKey(String key) {this.key = key;}
+    public void setKey(String key) {
+        this.key = key;
+    }
 
-    public String getKey() {return key;}
+    public String getKey() {
+        return key;
+    }
 
     public String getData() {
         return data;

@@ -17,25 +17,22 @@ import java.util.Locale;
  * Created by corei3 on 28-05-2018.
  */
 
-public class AdapterMessageList extends RecyclerView.Adapter<AdapterMessageList.MyViewHolder>{
+public class AdapterMessageList extends RecyclerView.Adapter<AdapterMessageList.MyViewHolder> {
 
     Context context;
-    ArrayList<ModelMessage> listModel=new ArrayList<>();
-    int VIEW_TYPE_MESSAGE_SENT=1;
-    int VIEW_TYPE_MESSAGE_RECEIVED=2;
+    ArrayList<ModelMessage> listModel = new ArrayList<>();
+    int VIEW_TYPE_MESSAGE_SENT = 1;
+    int VIEW_TYPE_MESSAGE_RECEIVED = 2;
 
     @Override
     public int getItemViewType(int position) {
 
-        String mAuthUserId=FirebaseAuth.getInstance().getCurrentUser().getUid();
-        String mCurrentUserId=listModel.get(position).getSent_by();
+        String mAuthUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        String mCurrentUserId = listModel.get(position).getSent_by();
 
-        if(mAuthUserId.equals(mCurrentUserId))
-        {
+        if (mAuthUserId.equals(mCurrentUserId)) {
             return VIEW_TYPE_MESSAGE_SENT;
-        }
-        else
-        {
+        } else {
             return VIEW_TYPE_MESSAGE_RECEIVED;
         }
 
@@ -48,29 +45,26 @@ public class AdapterMessageList extends RecyclerView.Adapter<AdapterMessageList.
         public MyViewHolder(View itemView) {
             super(itemView);
 
-            this.itemView=itemView;
+            this.itemView = itemView;
         }
     }
 
     public AdapterMessageList(Context context, ArrayList<ModelMessage> listModel) {
 
-        this.context=context;
+        this.context = context;
         this.listModel = listModel;
     }
 
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-        if(viewType==VIEW_TYPE_MESSAGE_SENT)
-        {
+        if (viewType == VIEW_TYPE_MESSAGE_SENT) {
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.sent_me, parent, false);
-            AdapterMessageList.MyViewHolder myViewHolder=new AdapterMessageList.MyViewHolder(view);
+            AdapterMessageList.MyViewHolder myViewHolder = new AdapterMessageList.MyViewHolder(view);
             return myViewHolder;
-        }
-        else
-        {
+        } else {
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.sent_other, parent, false);
-            AdapterMessageList.MyViewHolder myViewHolder=new AdapterMessageList.MyViewHolder(view);
+            AdapterMessageList.MyViewHolder myViewHolder = new AdapterMessageList.MyViewHolder(view);
             return myViewHolder;
         }
     }
@@ -78,20 +72,17 @@ public class AdapterMessageList extends RecyclerView.Adapter<AdapterMessageList.
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
 
-        int VIEW_TYPE_MESSAGE_SENT=1;
+        int VIEW_TYPE_MESSAGE_SENT = 1;
 
-        if(getItemViewType(position)==VIEW_TYPE_MESSAGE_SENT)
-        {
-            TextView text_me=(TextView) holder.itemView.findViewById(R.id.text_byMe);
-            TextView time_me=(TextView) holder.itemView.findViewById(R.id.msg_time_me);
+        if (getItemViewType(position) == VIEW_TYPE_MESSAGE_SENT) {
+            TextView text_me = (TextView) holder.itemView.findViewById(R.id.text_byMe);
+            TextView time_me = (TextView) holder.itemView.findViewById(R.id.msg_time_me);
 
             text_me.setText(listModel.get(position).getText());
             time_me.setText(getCurrentTime(listModel.get(position).getTime()));
-        }
-        else
-        {
-            TextView text_other=(TextView) holder.itemView.findViewById(R.id.text_message_body);
-            TextView time_other=(TextView) holder.itemView.findViewById(R.id.text_message_time);
+        } else {
+            TextView text_other = (TextView) holder.itemView.findViewById(R.id.text_message_body);
+            TextView time_other = (TextView) holder.itemView.findViewById(R.id.text_message_time);
 
             text_other.setText(listModel.get(position).getText());
             time_other.setText(getCurrentTime(listModel.get(position).getTime()));
@@ -104,9 +95,9 @@ public class AdapterMessageList extends RecyclerView.Adapter<AdapterMessageList.
     }
 
     public String getCurrentTime(String timestamp) {
-        Calendar cal=Calendar.getInstance(Locale.ENGLISH);
-        cal.setTimeInMillis((Long.parseLong(timestamp))*1000L);
-        String time= DateFormat.format("HH:mm", cal).toString();
+        Calendar cal = Calendar.getInstance(Locale.ENGLISH);
+        cal.setTimeInMillis((Long.parseLong(timestamp)) * 1000L);
+        String time = DateFormat.format("HH:mm", cal).toString();
         return time;
     }
 }

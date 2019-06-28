@@ -35,21 +35,19 @@ import com.mikhaellopez.circularimageview.CircularImageView;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private GoogleApiClient GoogleApiClient;
     private DatabaseReference databaseReference;
     private FirebaseAuth FirebaseAuth;
-    String userId="";
-    TextView mName ,mEmail;
+    String userId = "";
+    TextView mName, mEmail;
     CircularImageView mImg;
     ValueEventListener valueEventListener;
-    ArrayList<ModelFriendRequest> arrayList=new ArrayList<>();
+    ArrayList<ModelFriendRequest> arrayList = new ArrayList<>();
     String currentUserKey;
     FirebaseUser currentUser;
-    DatabaseReference db_friendList,db_usersProfile;
-
+    DatabaseReference db_friendList, db_usersProfile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,8 +57,8 @@ public class MainActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open,
+                R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
@@ -69,10 +67,10 @@ public class MainActivity extends AppCompatActivity
 
         FirebaseAuth = FirebaseAuth.getInstance();
         userId = FirebaseAuth.getCurrentUser().getUid();
-        currentUser= FirebaseAuth.getInstance().getCurrentUser();
-        currentUserKey=currentUser.getUid();
-        db_friendList= FirebaseDatabase.getInstance().getReference().child("friendList").child(currentUserKey);
-        db_usersProfile= FirebaseDatabase.getInstance().getReference().child("usersProfile").child(currentUserKey);
+        currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        currentUserKey = currentUser.getUid();
+        db_friendList = FirebaseDatabase.getInstance().getReference().child("friendList").child(currentUserKey);
+        db_usersProfile = FirebaseDatabase.getInstance().getReference().child("usersProfile").child(currentUserKey);
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.content_frame, new home()).commit();
@@ -84,7 +82,6 @@ public class MainActivity extends AppCompatActivity
         databaseReference = FirebaseDatabase.getInstance().getReference().child("usersProfile").child(userId);
         databaseReference.keepSynced(true);
 
-
         countRequests();
     }
 
@@ -94,17 +91,19 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 arrayList.clear();
-                for (DataSnapshot ds : dataSnapshot.getChildren())
-                {
-                    if(dataSnapshot.child(ds.getKey()).child("user_status").getValue().toString().equals("requestRecieved") || dataSnapshot.child(ds.getKey()).child("user_status").getValue().toString().equals("requestSent"))
-                    {
-                        ModelFriendRequest model=ds.getValue(ModelFriendRequest.class);
+                for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                    if (dataSnapshot.child(ds.getKey()).child("user_status").getValue().toString()
+                            .equals("requestRecieved")
+                            || dataSnapshot.child(ds.getKey()).child("user_status").getValue().toString()
+                                    .equals("requestSent")) {
+                        ModelFriendRequest model = ds.getValue(ModelFriendRequest.class);
                         arrayList.add(model);
                     }
                 }
-                if(arrayList.size()>0)
-                    Toast.makeText(MainActivity.this, "You have " +arrayList.size()+" pending requests", Toast.LENGTH_SHORT).show();
-                //showDialogBox(arrayList.size());
+                if (arrayList.size() > 0)
+                    Toast.makeText(MainActivity.this, "You have " + arrayList.size() + " pending requests",
+                            Toast.LENGTH_SHORT).show();
+                // showDialogBox(arrayList.size());
             }
 
             @Override
@@ -116,10 +115,9 @@ public class MainActivity extends AppCompatActivity
 
     private void showDialogBox(int size) {
 
-        AlertDialog.Builder alert = new AlertDialog.Builder(
-                MainActivity.this);
+        AlertDialog.Builder alert = new AlertDialog.Builder(MainActivity.this);
         alert.setTitle("Pending Requests");
-        alert.setMessage("You have " +size+" pending requests. Do you want to process?");
+        alert.setMessage("You have " + size + " pending requests. Do you want to process?");
         alert.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
 
             @Override
@@ -161,11 +159,8 @@ public class MainActivity extends AppCompatActivity
                 String img = dataSnapshot.child("profile_img").getValue().toString();
                 mName.setText(name);
                 mEmail.setText(email);
-                Glide.with(getApplicationContext()).load(img)
-                        .thumbnail(0.5f)
-                        .crossFade()
-                        .diskCacheStrategy(DiskCacheStrategy.ALL)
-                        .into(mImg);
+                Glide.with(getApplicationContext()).load(img).thumbnail(0.5f).crossFade()
+                        .diskCacheStrategy(DiskCacheStrategy.ALL).into(mImg);
             }
 
             @Override
@@ -177,7 +172,6 @@ public class MainActivity extends AppCompatActivity
 
         super.onResume();
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -193,33 +187,33 @@ public class MainActivity extends AppCompatActivity
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
+        // noinspection SimplifiableIfStatement
         if (id == R.id.action_logout) {
 
-            Long tsLong = System.currentTimeMillis()/1000;
+            Long tsLong = System.currentTimeMillis() / 1000;
             String timestamp = tsLong.toString();
             db_usersProfile.child("profile_online_status").setValue(timestamp);
 
             signOut();
             return true;
-        }else if(id==R.id.action_exit){
+        } else if (id == R.id.action_exit) {
             System.exit(0);
         }
-            return super.onOptionsItemSelected(item);
+        return super.onOptionsItemSelected(item);
     }
 
     private void signOut() {
-        Auth.GoogleSignInApi.signOut(GoogleApiClient).setResultCallback(
-                new ResultCallback<Status>() {
-                    @Override
-                    public void onResult(Status status) {
-                        FirebaseAuth.getInstance().signOut();
-                        Intent i=new Intent(MainActivity.this,Login.class);
-                        finish();
-                        startActivity(i);
-                    }
-                });
+        Auth.GoogleSignInApi.signOut(GoogleApiClient).setResultCallback(new ResultCallback<Status>() {
+            @Override
+            public void onResult(Status status) {
+                FirebaseAuth.getInstance().signOut();
+                Intent i = new Intent(MainActivity.this, Login.class);
+                finish();
+                startActivity(i);
+            }
+        });
     }
+
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
@@ -227,40 +221,37 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_about) {
-            Intent i=new Intent(this,About.class);
+            Intent i = new Intent(this, About.class);
             startActivity(i);
-        }else if (id == R.id.nav_dev) {
-            Intent i=new Intent(this,Developer.class);
+        } else if (id == R.id.nav_dev) {
+            Intent i = new Intent(this, Developer.class);
             startActivity(i);
-        }else if(id==R.id.nav_share){
+        } else if (id == R.id.nav_share) {
             final String appPackageName = getApplicationContext().getPackageName();
             Intent sendIntent = new Intent();
             sendIntent.setAction(Intent.ACTION_SEND);
-            sendIntent.putExtra(Intent.EXTRA_TEXT, "Linkr - Profile Linking Android App : https://play.google.com/store/apps/details?id=" + appPackageName);
+            sendIntent.putExtra(Intent.EXTRA_TEXT,
+                    "Linkr - Profile Linking Android App : https://play.google.com/store/apps/details?id="
+                            + appPackageName);
             sendIntent.setType("text/plain");
             startActivity(sendIntent);
-            }
-        else if(id==R.id.nav_edit){
+        } else if (id == R.id.nav_edit) {
             Intent intent = new Intent(this, EditProfile.class);
             startActivity(intent);
             return true;
-        }
-        else if(id==R.id.nav_contacts){
+        } else if (id == R.id.nav_contacts) {
             Intent intent = new Intent(this, Contacts.class);
             startActivity(intent);
             return true;
-        }
-        else if(id==R.id.nav_manage){
+        } else if (id == R.id.nav_manage) {
             Intent intent = new Intent(this, PendingRequests.class);
             startActivity(intent);
             return true;
-        }
-        else if(id==R.id.nav_chat){
-            
+        } else if (id == R.id.nav_chat) {
+
             openChatDialog();
             return true;
         }
-
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
@@ -269,22 +260,19 @@ public class MainActivity extends AppCompatActivity
 
     private void openChatDialog() {
 
-        final FragmentManager fm=getSupportFragmentManager();
-        final  ChatDialog tv=new ChatDialog();
-        tv.show(fm,"chat_tag");
+        final FragmentManager fm = getSupportFragmentManager();
+        final ChatDialog tv = new ChatDialog();
+        tv.show(fm, "chat_tag");
     }
 
     @Override
     protected void onStart() {
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestEmail()
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail()
                 .build();
-        GoogleApiClient = new GoogleApiClient.Builder(this)
-                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
-                .build();
+        GoogleApiClient = new GoogleApiClient.Builder(this).addApi(Auth.GOOGLE_SIGN_IN_API, gso).build();
         GoogleApiClient.connect();
 
-        if(currentUser != null){
+        if (currentUser != null) {
 
             db_usersProfile.child("profile_online_status").setValue("online");
         }
@@ -295,9 +283,9 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onStop() {
 
-        if(currentUser != null){
+        if (currentUser != null) {
 
-            Long tsLong = System.currentTimeMillis()/1000;
+            Long tsLong = System.currentTimeMillis() / 1000;
             String timestamp = tsLong.toString();
             db_usersProfile.child("profile_online_status").setValue(timestamp);
         }

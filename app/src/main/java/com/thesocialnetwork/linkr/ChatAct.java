@@ -13,7 +13,6 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
-
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.firebase.auth.FirebaseAuth;
@@ -30,24 +29,24 @@ import java.util.ArrayList;
 
 public class ChatAct extends AppCompatActivity {
 
-    String user_name,user_img,user_status;
-    TextView mTitle,mLastSeen;
+    String user_name, user_img, user_status;
+    TextView mTitle, mLastSeen;
     CircularImageView mActionBarImg;
-    DatabaseReference db_users_profile,db_mesgList;
-    String mAuthUserId,mCurrentUserId;
+    DatabaseReference db_users_profile, db_mesgList;
+    String mAuthUserId, mCurrentUserId;
     ImageButton mChatSend;
     EditText mMessageBox;
     SwipeRefreshLayout swipeRefreshLayout;
     RecyclerView messageListRV;
     LinearLayoutManager linearLayoutManager;
 
-    //For Loading Messages
+    // For Loading Messages
     private static final int TOTAL_ITEMS_TO_LOAD = 10;
     private int mCurrentPage = 1;
     private int itemPos = 0;
     private String mLastKey = "";
     private String mPrevKey = "";
-    ArrayList<ModelMessage> messagesList=new ArrayList<>();
+    ArrayList<ModelMessage> messagesList = new ArrayList<>();
     AdapterMessageList mAdapter;
 
     @Override
@@ -55,8 +54,8 @@ public class ChatAct extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
 
-        Bundle bundle=getIntent().getExtras();
-        mCurrentUserId=bundle.getString("user_key");
+        Bundle bundle = getIntent().getExtras();
+        mCurrentUserId = bundle.getString("user_key");
 
         final ActionBar mActionBar = getSupportActionBar();
         mActionBar.setDisplayShowHomeEnabled(false);
@@ -66,31 +65,32 @@ public class ChatAct extends AppCompatActivity {
         mActionBar.setCustomView(mCustomView);
         mActionBar.setDisplayShowCustomEnabled(true);
 
-        mTitle=(TextView)findViewById(R.id.custom_bar_title);
-        mLastSeen=(TextView)findViewById(R.id.custom_bar_seen_time);
-        mActionBarImg=(CircularImageView) findViewById(R.id.custom_bar_image);
-        mChatSend=(ImageButton)findViewById(R.id.chat_send_btn);
-        mMessageBox=(EditText)findViewById(R.id.chat_message_view);
-        swipeRefreshLayout=(SwipeRefreshLayout)findViewById(R.id.swipeRefresh);
-        messageListRV=(RecyclerView) findViewById(R.id.messages_list);
+        mTitle = (TextView) findViewById(R.id.custom_bar_title);
+        mLastSeen = (TextView) findViewById(R.id.custom_bar_seen_time);
+        mActionBarImg = (CircularImageView) findViewById(R.id.custom_bar_image);
+        mChatSend = (ImageButton) findViewById(R.id.chat_send_btn);
+        mMessageBox = (EditText) findViewById(R.id.chat_message_view);
+        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefresh);
+        messageListRV = (RecyclerView) findViewById(R.id.messages_list);
         linearLayoutManager = new LinearLayoutManager(this);
         messageListRV.setHasFixedSize(true);
         messageListRV.setLayoutManager(linearLayoutManager);
 
-        db_mesgList=FirebaseDatabase.getInstance().getReference().child("msgList");
-        mAuthUserId= FirebaseAuth.getInstance().getCurrentUser().getUid();
-        db_users_profile= FirebaseDatabase.getInstance().getReference().child("usersProfile").child(mCurrentUserId);
+        db_mesgList = FirebaseDatabase.getInstance().getReference().child("msgList");
+        mAuthUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        db_users_profile = FirebaseDatabase.getInstance().getReference().child("usersProfile").child(mCurrentUserId);
 
         db_users_profile.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
-                user_name=dataSnapshot.child("profile_name").getValue().toString();
-                user_img=dataSnapshot.child("profile_img").getValue().toString();
-                user_status=dataSnapshot.child("profile_online_status").getValue().toString();
+                user_name = dataSnapshot.child("profile_name").getValue().toString();
+                user_img = dataSnapshot.child("profile_img").getValue().toString();
+                user_status = dataSnapshot.child("profile_online_status").getValue().toString();
                 mTitle.setText(user_name);
-                Glide.with(ChatAct.this).load(user_img).thumbnail(0.5f).crossFade().centerCrop().diskCacheStrategy(DiskCacheStrategy.ALL).into(mActionBarImg);
-                if(user_status.equals("online")) {
+                Glide.with(ChatAct.this).load(user_img).thumbnail(0.5f).crossFade().centerCrop()
+                        .diskCacheStrategy(DiskCacheStrategy.ALL).into(mActionBarImg);
+                if (user_status.equals("online")) {
                     mLastSeen.setText("Online");
                 } else {
                     GetTimeAgo getTimeAgo = new GetTimeAgo();
@@ -109,20 +109,19 @@ public class ChatAct extends AppCompatActivity {
         mChatSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(!TextUtils.isEmpty(mMessageBox.getText().toString()))
-                {
+                if (!TextUtils.isEmpty(mMessageBox.getText().toString())) {
                     storeMsg();
                     mMessageBox.setText("");
                 }
             }
         });
 
-        mAdapter = new AdapterMessageList(this,messagesList);
+        mAdapter = new AdapterMessageList(this, messagesList);
         messageListRV.setAdapter(mAdapter);
 
         loadMessages();
 
-        //For Loading Message
+        // For Loading Message
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -133,6 +132,7 @@ public class ChatAct extends AppCompatActivity {
         });
 
     }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -156,28 +156,37 @@ public class ChatAct extends AppCompatActivity {
 
                 ModelMessage message = dataSnapshot.getValue(ModelMessage.class);
                 String messageKey = dataSnapshot.getKey();
-                if(!mPrevKey.equals(messageKey)){
+                if (!mPrevKey.equals(messageKey)) {
                     messagesList.add(itemPos++, message);
                 } else {
                     mPrevKey = mLastKey;
                 }
 
-                if(itemPos == 1) {
+                if (itemPos == 1) {
                     mLastKey = messageKey;
                 }
-                Log.d("TOTALKEYS", "Last Key : " + mLastKey + " | Prev Key : " + mPrevKey + " | Message Key : " + messageKey);
+                Log.d("TOTALKEYS",
+                        "Last Key : " + mLastKey + " | Prev Key : " + mPrevKey + " | Message Key : " + messageKey);
                 mAdapter.notifyDataSetChanged();
                 swipeRefreshLayout.setRefreshing(false);
                 linearLayoutManager.scrollToPositionWithOffset(10, 0);
             }
+
             @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {}
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+            }
+
             @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {}
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+            }
+
             @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {}
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+            }
+
             @Override
-            public void onCancelled(DatabaseError databaseError) {}
+            public void onCancelled(DatabaseError databaseError) {
+            }
         });
     }
 
@@ -192,7 +201,7 @@ public class ChatAct extends AppCompatActivity {
 
                 ModelMessage message = dataSnapshot.getValue(ModelMessage.class);
                 itemPos++;
-                if(itemPos == 1){
+                if (itemPos == 1) {
                     String messageKey = dataSnapshot.getKey();
                     mLastKey = messageKey;
                     mPrevKey = messageKey;
@@ -203,25 +212,33 @@ public class ChatAct extends AppCompatActivity {
                 swipeRefreshLayout.setRefreshing(false);
 
             }
+
             @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {}
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+            }
+
             @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {}
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+            }
+
             @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {}
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+            }
+
             @Override
-            public void onCancelled(DatabaseError databaseError) {}
+            public void onCancelled(DatabaseError databaseError) {
+            }
         });
     }
 
     private void storeMsg() {
 
-        String push_id=db_mesgList.child(mAuthUserId).child(mCurrentUserId).push().getKey();
-        String text=mMessageBox.getText().toString();
+        String push_id = db_mesgList.child(mAuthUserId).child(mCurrentUserId).push().getKey();
+        String text = mMessageBox.getText().toString();
 
-        Long tsLong = System.currentTimeMillis()/1000;
+        Long tsLong = System.currentTimeMillis() / 1000;
         String timestamp = tsLong.toString();
-        ModelMessage modelMessageForAuthId=new ModelMessage(text,timestamp,mAuthUserId);
+        ModelMessage modelMessageForAuthId = new ModelMessage(text, timestamp, mAuthUserId);
 
         db_mesgList.child(mAuthUserId).child(mCurrentUserId).child(push_id).setValue(modelMessageForAuthId);
         db_mesgList.child(mCurrentUserId).child(mAuthUserId).child(push_id).setValue(modelMessageForAuthId);

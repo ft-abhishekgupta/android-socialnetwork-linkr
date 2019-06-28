@@ -12,7 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-public class Contacts extends AppCompatActivity{
+public class Contacts extends AppCompatActivity {
 
     private TabLayout mTabLayout;
     private ViewPager mViewPager;
@@ -29,20 +29,21 @@ public class Contacts extends AppCompatActivity{
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        mViewPager=(ViewPager)findViewById(R.id.tab_pager);
-        mPager= new PagerContacts(getSupportFragmentManager());
+        mViewPager = (ViewPager) findViewById(R.id.tab_pager);
+        mPager = new PagerContacts(getSupportFragmentManager());
         mViewPager.setAdapter(mPager);
 
-        mTabLayout=(TabLayout)findViewById(R.id.tab_layout);
+        mTabLayout = (TabLayout) findViewById(R.id.tab_layout);
         mTabLayout.setupWithViewPager(mViewPager);
     }
 
     @Override
     public boolean onCreateOptionsMenu(final Menu menu) {
-        //return super.onCreateOptionsMenu(menu);
+        // return super.onCreateOptionsMenu(menu);
         getMenuInflater().inflate(R.menu.pending_request, menu);
         return true;
     }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -55,18 +56,18 @@ public class Contacts extends AppCompatActivity{
         finish();
         super.onBackPressed();
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        //return super.onOptionsItemSelected(item);
+        // return super.onOptionsItemSelected(item);
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
+        // noinspection SimplifiableIfStatement
         if (id == R.id.action_pending_request) {
             Intent intent = new Intent(this, PendingRequests.class);
             startActivity(intent);
             return true;
-        }
-        else
+        } else
             return super.onOptionsItemSelected(item);
     }
 }

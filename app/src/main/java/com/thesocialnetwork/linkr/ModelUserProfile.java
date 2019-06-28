@@ -32,14 +32,15 @@ public class ModelUserProfile {
         this.profile_online_status = profile_online_status;
     }
 
-    public ModelUserProfile(String profile_uid, String profile_name, String profile_phone, String profile_email, String profile_img, String profile_online_status) {
+    public ModelUserProfile(String profile_uid, String profile_name, String profile_phone, String profile_email,
+            String profile_img, String profile_online_status) {
 
-        this.profile_uid=profile_uid;
+        this.profile_uid = profile_uid;
         this.profile_name = profile_name;
         this.profile_phone = profile_phone;
         this.profile_email = profile_email;
         this.profile_img = profile_img;
-        this.profile_online_status=profile_online_status;
+        this.profile_online_status = profile_online_status;
     }
 
     public String getProfile_name() {

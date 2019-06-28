@@ -23,13 +23,14 @@ public class PendingRequests extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        mViewPager=(ViewPager)findViewById(R.id.tab_pager2);
-        mPager= new PagerPendingRequests(getSupportFragmentManager());
+        mViewPager = (ViewPager) findViewById(R.id.tab_pager2);
+        mPager = new PagerPendingRequests(getSupportFragmentManager());
         mViewPager.setAdapter(mPager);
 
-        mTabLayout=(TabLayout)findViewById(R.id.tab_layout2);
+        mTabLayout = (TabLayout) findViewById(R.id.tab_layout2);
         mTabLayout.setupWithViewPager(mViewPager);
     }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();

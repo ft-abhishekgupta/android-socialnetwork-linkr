@@ -15,19 +15,27 @@
       },
       "oauth_client": [
         {
-          "client_id": "371436681280-0brejv5f1d31nj1jbmng12rmpf92ca5f.apps.googleusercontent.com",
+          "client_id": "371436681280-qsfra0ak5lf1a6lfef1a1jh4rkugoqic.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.thesocialnetwork.linkr",
-            "certificate_hash": "7adc93c31c27cd859c2c2406f56a2d6ed400f405"
+            "certificate_hash": "8d0003375dbd20653399f33bbd359f7deac85502"
           }
         },
         {
-          "client_id": "371436681280-khb44vtobfv8b83ddkkejrun5av0ucfl.apps.googleusercontent.com",
+          "client_id": "371436681280-35ff1fc2rguhu5663knvcspjbkfp66li.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.thesocialnetwork.linkr",
-            "certificate_hash": "6d24c04ce1b0f8a07ce50b4a96ee1f70c812004c"
+            "certificate_hash": "d180281dc39b92f2f6f84a384ddb1f94ab2ea154"
+          }
+        },
+        {
+          "client_id": "371436681280-a14pcqt742g7sggsa5akg1mpbube7fk3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.thesocialnetwork.linkr",
+            "certificate_hash": "b2950b4c79fd13c7f43c1f206f167968937ff308"
           }
         },
         {
@@ -41,20 +49,13 @@
         }
       ],
       "services": {
-        "analytics_service": {
-          "status": 1
-        },
         "appinvite_service": {
-          "status": 2,
           "other_platform_oauth_client": [
             {
               "client_id": "371436681280-ljj26pa6ae2qus9endr3tb2cef9rd1q3.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
-        },
-        "ads_service": {
-          "status": 2
         }
       }
     }

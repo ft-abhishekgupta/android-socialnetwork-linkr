@@ -14,7 +14,6 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import java.util.ArrayList;
 
 /**
@@ -23,31 +22,31 @@ import java.util.ArrayList;
 
 public class AdapterUsersProfile extends RecyclerView.Adapter<AdapterUsersProfile.MyViewHolder> {
 
-    ArrayList<ModelDetailedInfo> listModels=new ArrayList<>();
+    ArrayList<ModelDetailedInfo> listModels = new ArrayList<>();
     String infoAbout;
     Context context;
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
 
-        TextView userData,userDataType;
+        TextView userData, userDataType;
         View itemView;
         LinearLayout linearLayout;
 
         public MyViewHolder(View itemView) {
 
             super(itemView);
-            this.userData=(TextView)itemView.findViewById(R.id.user_data);
-            this.userDataType=(TextView)itemView.findViewById(R.id.user_data_type);
-            this.linearLayout=(LinearLayout)itemView.findViewById(R.id.user_items_linear_layout);
-            this.itemView=itemView;
+            this.userData = (TextView) itemView.findViewById(R.id.user_data);
+            this.userDataType = (TextView) itemView.findViewById(R.id.user_data_type);
+            this.linearLayout = (LinearLayout) itemView.findViewById(R.id.user_items_linear_layout);
+            this.itemView = itemView;
         }
     }
 
-    public AdapterUsersProfile(Context context, ArrayList<ModelDetailedInfo> listModels , String infoAbout) {
+    public AdapterUsersProfile(Context context, ArrayList<ModelDetailedInfo> listModels, String infoAbout) {
 
-        this.context=context;
-        this.infoAbout=infoAbout;
-        this.listModels=listModels;
+        this.context = context;
+        this.infoAbout = infoAbout;
+        this.listModels = listModels;
     }
 
     @Override
@@ -61,9 +60,9 @@ public class AdapterUsersProfile extends RecyclerView.Adapter<AdapterUsersProfil
     @Override
     public void onBindViewHolder(AdapterUsersProfile.MyViewHolder holder, final int position) {
 
-        TextView userData=holder.userData;
-        TextView userDataType=holder.userDataType;
-        LinearLayout linearLayout=holder.linearLayout;
+        TextView userData = holder.userData;
+        TextView userDataType = holder.userDataType;
+        LinearLayout linearLayout = holder.linearLayout;
 
         userData.setText(listModels.get(position).getData());
         userDataType.setText(listModels.get(position).getType());
@@ -71,78 +70,75 @@ public class AdapterUsersProfile extends RecyclerView.Adapter<AdapterUsersProfil
         linearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showDialogBox(infoAbout,listModels.get(position).getData());
+                showDialogBox(infoAbout, listModels.get(position).getData());
             }
         });
     }
 
     private void showDialogBox(String infoAbout, final String data) {
 
-        if(infoAbout.equals("Phone"))
-        {
-            CharSequence options[] = new CharSequence[]{"Copy", "Call"};
+        if (infoAbout.equals("Phone")) {
+            CharSequence options[] = new CharSequence[] { "Copy", "Call" };
             final AlertDialog.Builder builder = new AlertDialog.Builder(context);
             builder.setTitle("Select Options");
             builder.setItems(options, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
-                    //Click Event for each item.
-                    if(i == 0){
-                        ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
-                        ClipData clip = ClipData.newPlainText("label",data);
+                    // Click Event for each item.
+                    if (i == 0) {
+                        ClipboardManager clipboard = (ClipboardManager) context
+                                .getSystemService(Context.CLIPBOARD_SERVICE);
+                        ClipData clip = ClipData.newPlainText("label", data);
                         clipboard.setPrimaryClip(clip);
                         Toast.makeText(context, "Copied to clipboard", Toast.LENGTH_SHORT).show();
                     }
 
-                    if(i == 1){
+                    if (i == 1) {
                         Intent intent = new Intent(Intent.ACTION_DIAL);
-                        intent.setData(Uri.parse("tel:"+data));
+                        intent.setData(Uri.parse("tel:" + data));
                         context.startActivity(intent);
                     }
                 }
             });
 
             builder.show();
-        }
-        else if(infoAbout.equals("Email"))
-        {
-            CharSequence options[] = new CharSequence[]{"Copy", "Send Email"};
+        } else if (infoAbout.equals("Email")) {
+            CharSequence options[] = new CharSequence[] { "Copy", "Send Email" };
             final AlertDialog.Builder builder = new AlertDialog.Builder(context);
             builder.setTitle("Select Options");
             builder.setItems(options, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
-                    //Click Event for each item.
-                    if(i == 0){
-                        ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
-                        ClipData clip = ClipData.newPlainText("label",data);
+                    // Click Event for each item.
+                    if (i == 0) {
+                        ClipboardManager clipboard = (ClipboardManager) context
+                                .getSystemService(Context.CLIPBOARD_SERVICE);
+                        ClipData clip = ClipData.newPlainText("label", data);
                         clipboard.setPrimaryClip(clip);
                         Toast.makeText(context, "Copied to clipboard", Toast.LENGTH_SHORT).show();
                     }
 
-                    if(i == 1){
+                    if (i == 1) {
 
-                        Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
-                                "mailto",data, null));
+                        Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts("mailto", data, null));
                         context.startActivity(Intent.createChooser(emailIntent, "Send email.."));
                     }
                 }
             });
 
             builder.show();
-        }
-        else if(infoAbout.equals("Address"))
-        {
-            CharSequence options[] = new CharSequence[]{"Copy"};
+        } else if (infoAbout.equals("Address")) {
+            CharSequence options[] = new CharSequence[] { "Copy" };
             final AlertDialog.Builder builder = new AlertDialog.Builder(context);
             builder.setTitle("Select Options");
             builder.setItems(options, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
-                    //Click Event for each item.
-                    if(i == 0){
-                        ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
-                        ClipData clip = ClipData.newPlainText("label",data);
+                    // Click Event for each item.
+                    if (i == 0) {
+                        ClipboardManager clipboard = (ClipboardManager) context
+                                .getSystemService(Context.CLIPBOARD_SERVICE);
+                        ClipData clip = ClipData.newPlainText("label", data);
                         clipboard.setPrimaryClip(clip);
                         Toast.makeText(context, "Copied to clipboard", Toast.LENGTH_SHORT).show();
                     }
@@ -150,26 +146,25 @@ public class AdapterUsersProfile extends RecyclerView.Adapter<AdapterUsersProfil
             });
 
             builder.show();
-        }
-        else
-        {
-            CharSequence options[] = new CharSequence[]{"Copy", "Open in browser"};
+        } else {
+            CharSequence options[] = new CharSequence[] { "Copy", "Open in browser" };
             final AlertDialog.Builder builder = new AlertDialog.Builder(context);
             builder.setTitle("Select Options");
             builder.setItems(options, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
-                    //Click Event for each item.
-                    if(i == 0){
-                        ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
-                        ClipData clip = ClipData.newPlainText("label",data);
+                    // Click Event for each item.
+                    if (i == 0) {
+                        ClipboardManager clipboard = (ClipboardManager) context
+                                .getSystemService(Context.CLIPBOARD_SERVICE);
+                        ClipData clip = ClipData.newPlainText("label", data);
                         clipboard.setPrimaryClip(clip);
                         Toast.makeText(context, "Copied to clipboard", Toast.LENGTH_SHORT).show();
                     }
 
-                    if(i == 1){
+                    if (i == 1) {
 
-                        String url=data;
+                        String url = data;
                         if (!url.startsWith("http://") && !url.startsWith("https://"))
                             url = "http://" + url;
                         Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));

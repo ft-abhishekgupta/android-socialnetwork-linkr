@@ -18,14 +18,14 @@ public class PagerPendingRequests extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
 
         switch (position) {
-            case 0:
-                TabRequestSent tabRequestSent=new TabRequestSent();
-                return tabRequestSent;
-            case 1:
-                TabRequestRecieved tabRequestRecieved = new TabRequestRecieved();
-                return tabRequestRecieved;
-            default:
-                return null;
+        case 0:
+            TabRequestSent tabRequestSent = new TabRequestSent();
+            return tabRequestSent;
+        case 1:
+            TabRequestRecieved tabRequestRecieved = new TabRequestRecieved();
+            return tabRequestRecieved;
+        default:
+            return null;
         }
     }
 
@@ -37,8 +37,11 @@ public class PagerPendingRequests extends FragmentPagerAdapter {
     @Override
     public CharSequence getPageTitle(int position) {
 
-        if(position==0) return "Sent";
-        else if(position==1) return "Recieved";
-        else return null;
+        if (position == 0)
+            return "Sent";
+        else if (position == 1)
+            return "Recieved";
+        else
+            return null;
     }
 }

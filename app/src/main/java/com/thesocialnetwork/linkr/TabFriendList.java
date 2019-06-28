@@ -13,7 +13,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
-
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -28,21 +27,22 @@ public class TabFriendList extends Fragment {
     RecyclerView rv;
     LinearLayoutManager layoutManager;
     AdapterFriendList adapterFriendList;
-    ArrayList<ModelFriendRequest> arrayList=new ArrayList<>();
+    ArrayList<ModelFriendRequest> arrayList = new ArrayList<>();
     DatabaseReference db_friendList;
     String currentUserKey;
     View mMainView;
+
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
 
-        mMainView=inflater.inflate(R.layout.friend_list, container, false);
+        mMainView = inflater.inflate(R.layout.friend_list, container, false);
         setHasOptionsMenu(true);
-        rv=mMainView.findViewById(R.id.friend_list);
+        rv = mMainView.findViewById(R.id.friend_list);
         rv.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(mMainView.getContext());
         rv.setLayoutManager(layoutManager);
-        currentUserKey= FirebaseAuth.getInstance().getCurrentUser().getUid();
-        db_friendList= FirebaseDatabase.getInstance().getReference().child("friendList").child(currentUserKey);
+        currentUserKey = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        db_friendList = FirebaseDatabase.getInstance().getReference().child("friendList").child(currentUserKey);
         db_friendList.keepSynced(true);
 
         return mMainView;
@@ -52,7 +52,7 @@ public class TabFriendList extends Fragment {
     public void onResume() {
         super.onResume();
 
-        adapterFriendList=new AdapterFriendList(mMainView.getContext(),fetch(),"friend");
+        adapterFriendList = new AdapterFriendList(mMainView.getContext(), fetch(), "friend");
         rv.setAdapter(adapterFriendList);
     }
 
@@ -103,11 +103,10 @@ public class TabFriendList extends Fragment {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 arrayList.clear();
-                for (DataSnapshot ds : dataSnapshot.getChildren())
-                {
-                    if(dataSnapshot.child(ds.getKey()).child("user_status").getValue().toString().equals("requestAccepted"))
-                    {
-                        ModelFriendRequest model=ds.getValue(ModelFriendRequest.class);
+                for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                    if (dataSnapshot.child(ds.getKey()).child("user_status").getValue().toString()
+                            .equals("requestAccepted")) {
+                        ModelFriendRequest model = ds.getValue(ModelFriendRequest.class);
                         arrayList.add(model);
                     }
                 }

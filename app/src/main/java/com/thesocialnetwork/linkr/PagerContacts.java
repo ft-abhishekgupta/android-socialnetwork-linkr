@@ -18,14 +18,14 @@ public class PagerContacts extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
 
         switch (position) {
-            case 0:
-                TabFriendList tabFriendList=new TabFriendList();
-                return tabFriendList;
-            case 1:
-                TabUserList tabUserList = new TabUserList();
-                return tabUserList;
-            default:
-                return null;
+        case 0:
+            TabFriendList tabFriendList = new TabFriendList();
+            return tabFriendList;
+        case 1:
+            TabUserList tabUserList = new TabUserList();
+            return tabUserList;
+        default:
+            return null;
         }
     }
 
@@ -37,8 +37,11 @@ public class PagerContacts extends FragmentPagerAdapter {
     @Override
     public CharSequence getPageTitle(int position) {
 
-        if(position==0) return "Friends";
-        else if(position==1) return "Users";
-        else return null;
+        if (position == 0)
+            return "Friends";
+        else if (position == 1)
+            return "Users";
+        else
+            return null;
     }
 }

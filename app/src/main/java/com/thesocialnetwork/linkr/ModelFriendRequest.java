@@ -14,9 +14,9 @@ public class ModelFriendRequest {
     public ModelFriendRequest() {
     }
 
-    public ModelFriendRequest(String user_key,String user_name, String user_email, String user_status) {
+    public ModelFriendRequest(String user_key, String user_name, String user_email, String user_status) {
 
-        this.user_key=user_key;
+        this.user_key = user_key;
         this.user_name = user_name;
         this.user_email = user_email;
         this.user_status = user_status;

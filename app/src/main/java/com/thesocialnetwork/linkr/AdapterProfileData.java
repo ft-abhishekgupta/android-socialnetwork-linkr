@@ -34,45 +34,44 @@ import java.util.Calendar;
 
 public class AdapterProfileData extends RecyclerView.Adapter<AdapterProfileData.MyViewHolder> {
 
-
-    ArrayList<ModelDetailedInfo> listModels=new ArrayList<>();
+    ArrayList<ModelDetailedInfo> listModels = new ArrayList<>();
     String infoAbout;
     Context context;
-    String ph,email;
+    String ph, email;
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
 
-
-        TextView data_type,user_data;
+        TextView data_type, user_data;
         ImageView edit_data;
 
         public MyViewHolder(View itemView) {
 
             super(itemView);
-            this.data_type=(TextView) itemView.findViewById(R.id.data_type);
-            this.user_data=(TextView) itemView.findViewById(R.id.user_data);
-            this.edit_data=(ImageView) itemView.findViewById(R.id.edit_btn);
+            this.data_type = (TextView) itemView.findViewById(R.id.data_type);
+            this.user_data = (TextView) itemView.findViewById(R.id.user_data);
+            this.edit_data = (ImageView) itemView.findViewById(R.id.edit_btn);
         }
     }
 
-    public AdapterProfileData(Context context, ArrayList<ModelDetailedInfo> listModels , String infoAbout) {
+    public AdapterProfileData(Context context, ArrayList<ModelDetailedInfo> listModels, String infoAbout) {
 
-        this.context=context;
+        this.context = context;
         this.listModels = listModels;
         this.infoAbout = infoAbout;
-        final String UserId=FirebaseAuth.getInstance().getCurrentUser().getUid();
-        FirebaseDatabase.getInstance().getReference().child("usersProfile").child(UserId).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                ph=dataSnapshot.child("profile_phone").getValue().toString().trim();
-                email=dataSnapshot.child("profile_email").getValue().toString().trim();
-            }
+        final String UserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        FirebaseDatabase.getInstance().getReference().child("usersProfile").child(UserId)
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        ph = dataSnapshot.child("profile_phone").getValue().toString().trim();
+                        email = dataSnapshot.child("profile_email").getValue().toString().trim();
+                    }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
 
-            }
-        });
+                    }
+                });
     }
 
     @Override
@@ -88,17 +87,14 @@ public class AdapterProfileData extends RecyclerView.Adapter<AdapterProfileData.
 
         TextView data_type = holder.data_type;
         TextView user_data = holder.user_data;
-        final ImageView edit_data=holder.edit_data;
-        final String UserId=FirebaseAuth.getInstance().getCurrentUser().getUid();
+        final ImageView edit_data = holder.edit_data;
+        final String UserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
         data_type.setText(listModels.get(position).getType());
         user_data.setText(listModels.get(position).getData());
-        if(listModels.get(position).getData().equals(ph) || listModels.get(position).getData().equals(email))
-        {
+        if (listModels.get(position).getData().equals(ph) || listModels.get(position).getData().equals(email)) {
             edit_data.setVisibility(View.INVISIBLE);
-        }
-        else
-        {
+        } else {
             edit_data.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -111,112 +107,107 @@ public class AdapterProfileData extends RecyclerView.Adapter<AdapterProfileData.
 
                             switch (menuItem.getItemId()) {
 
-                                case R.id.edit:
+                            case R.id.edit:
 
-                                    String data=listModels.get(position).getData();
-                                    String type=listModels.get(position).getType();
-                                    String privacy=listModels.get(position).getPrivacy();
-                                    String for_what;
+                                String data = listModels.get(position).getData();
+                                String type = listModels.get(position).getType();
+                                String privacy = listModels.get(position).getPrivacy();
+                                String for_what;
 
-                                    DatabaseReference db1;
-                                    if(infoAbout.equals("Phone"))
-                                    {
-                                        for_what="Phone";
-                                        db1=FirebaseDatabase.getInstance().getReference().child("detailedInfo").child(UserId).child("other_phone").child(listModels.get(position).getKey());
-                                        db1.keepSynced(true);
+                                DatabaseReference db1;
+                                if (infoAbout.equals("Phone")) {
+                                    for_what = "Phone";
+                                    db1 = FirebaseDatabase.getInstance().getReference().child("detailedInfo")
+                                            .child(UserId).child("other_phone")
+                                            .child(listModels.get(position).getKey());
+                                    db1.keepSynced(true);
+                                } else if (infoAbout.equals("Email")) {
+                                    for_what = "Email";
+                                    db1 = FirebaseDatabase.getInstance().getReference().child("detailedInfo")
+                                            .child(UserId).child("other_email")
+                                            .child(listModels.get(position).getKey());
+                                    db1.keepSynced(true);
+                                } else if (infoAbout.equals("Address")) {
+                                    for_what = "Address";
+                                    db1 = FirebaseDatabase.getInstance().getReference().child("detailedInfo")
+                                            .child(UserId).child("other_address")
+                                            .child(listModels.get(position).getKey());
+                                    db1.keepSynced(true);
+                                } else {
+                                    for_what = "Social Link";
+                                    db1 = FirebaseDatabase.getInstance().getReference().child("detailedInfo")
+                                            .child(UserId).child("other_link").child(listModels.get(position).getKey());
+                                    db1.keepSynced(true);
+                                }
+
+                                showDialogBox(db1, data, type, privacy, for_what);
+                                return true;
+
+                            case R.id.delete:
+
+                                DatabaseReference db;
+                                if (infoAbout.equals("Phone")) {
+                                    db = FirebaseDatabase.getInstance().getReference().child("detailedInfo")
+                                            .child(UserId).child("other_phone")
+                                            .child(listModels.get(position).getKey());
+                                    db.keepSynced(true);
+                                } else if (infoAbout.equals("Email")) {
+                                    db = FirebaseDatabase.getInstance().getReference().child("detailedInfo")
+                                            .child(UserId).child("other_email")
+                                            .child(listModels.get(position).getKey());
+                                    db.keepSynced(true);
+                                } else if (infoAbout.equals("Address")) {
+                                    db = FirebaseDatabase.getInstance().getReference().child("detailedInfo")
+                                            .child(UserId).child("other_address")
+                                            .child(listModels.get(position).getKey());
+                                    db.keepSynced(true);
+                                } else {
+                                    db = FirebaseDatabase.getInstance().getReference().child("detailedInfo")
+                                            .child(UserId).child("other_link").child(listModels.get(position).getKey());
+                                    db.keepSynced(true);
+                                }
+
+                                db.addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(final DataSnapshot dataSnapshot) {
+
+                                        AlertDialog.Builder alert = new AlertDialog.Builder(context);
+                                        alert.setTitle("Alert!!");
+                                        alert.setMessage("Are you sure to delete this item?");
+                                        alert.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+
+                                                dataSnapshot.getRef().removeValue();
+                                                dialog.dismiss();
+                                                listModels.remove(position);
+                                                notifyDataSetChanged();
+                                                // notifyItemRemoved(position);
+                                                // notifyItemRangeChanged(position, listModels.size());
+                                                Toast.makeText(context, "Removed Successfully", Toast.LENGTH_SHORT)
+                                                        .show();
+                                            }
+                                        });
+                                        alert.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                dialog.dismiss();
+                                            }
+                                        });
+
+                                        alert.show();
                                     }
-                                    else if(infoAbout.equals("Email"))
-                                    {
-                                        for_what="Email";
-                                        db1=FirebaseDatabase.getInstance().getReference().child("detailedInfo").child(UserId).child("other_email").child(listModels.get(position).getKey());
-                                        db1.keepSynced(true);
+
+                                    @Override
+                                    public void onCancelled(DatabaseError error) {
                                     }
-                                    else if(infoAbout.equals("Address"))
-                                    {
-                                        for_what="Address";
-                                        db1=FirebaseDatabase.getInstance().getReference().child("detailedInfo").child(UserId).child("other_address").child(listModels.get(position).getKey());
-                                        db1.keepSynced(true);
-                                    }
-                                    else
-                                    {
-                                        for_what="Social Link";
-                                        db1=FirebaseDatabase.getInstance().getReference().child("detailedInfo").child(UserId).child("other_link").child(listModels.get(position).getKey());
-                                        db1.keepSynced(true);
-                                    }
+                                });
+                                return true;
 
-                                    showDialogBox(db1,data,type,privacy,for_what);
-                                    return true;
-
-
-
-                                case R.id.delete:
-
-                                    DatabaseReference db;
-                                    if(infoAbout.equals("Phone"))
-                                    {
-                                        db=FirebaseDatabase.getInstance().getReference().child("detailedInfo").child(UserId).child("other_phone").child(listModels.get(position).getKey());
-                                        db.keepSynced(true);
-                                    }
-                                    else if(infoAbout.equals("Email"))
-                                    {
-                                        db=FirebaseDatabase.getInstance().getReference().child("detailedInfo").child(UserId).child("other_email").child(listModels.get(position).getKey());
-                                        db.keepSynced(true);
-                                    }
-                                    else if(infoAbout.equals("Address"))
-                                    {
-                                        db=FirebaseDatabase.getInstance().getReference().child("detailedInfo").child(UserId).child("other_address").child(listModels.get(position).getKey());
-                                        db.keepSynced(true);
-                                    }
-                                    else
-                                    {
-                                        db=FirebaseDatabase.getInstance().getReference().child("detailedInfo").child(UserId).child("other_link").child(listModels.get(position).getKey());
-                                        db.keepSynced(true);
-                                    }
-
-                                    db.addListenerForSingleValueEvent(new ValueEventListener() {
-                                        @Override
-                                        public void onDataChange(final DataSnapshot dataSnapshot) {
-
-
-                                            AlertDialog.Builder alert = new AlertDialog.Builder(
-                                                    context);
-                                            alert.setTitle("Alert!!");
-                                            alert.setMessage("Are you sure to delete this item?");
-                                            alert.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-
-                                                @Override
-                                                public void onClick(DialogInterface dialog, int which) {
-
-                                                    dataSnapshot.getRef().removeValue();
-                                                    dialog.dismiss();
-                                                    listModels.remove(position);
-                                                    notifyDataSetChanged();
-                                                    //notifyItemRemoved(position);
-                                                    //notifyItemRangeChanged(position, listModels.size());
-                                                    Toast.makeText(context,"Removed Successfully", Toast.LENGTH_SHORT).show();
-                                                }
-                                            });
-                                            alert.setNegativeButton("NO", new DialogInterface.OnClickListener() {
-
-                                                @Override
-                                                public void onClick(DialogInterface dialog, int which) {
-                                                    dialog.dismiss();
-                                                }
-                                            });
-
-                                            alert.show();
-                                        }
-
-                                        @Override
-                                        public void onCancelled(DatabaseError error) {
-                                        }
-                                    });
-                                    return true;
-
-
-
-                                default:
-                                    return false;
+                            default:
+                                return false;
                             }
                         }
                     });
@@ -230,23 +221,22 @@ public class AdapterProfileData extends RecyclerView.Adapter<AdapterProfileData.
 
         LayoutInflater li = LayoutInflater.from(context);
         View promptsView = li.inflate(R.layout.add_item_dialog, null);
-        final EditText editText=(EditText) promptsView.findViewById(R.id.enterDetail);
-        final Spinner spinner1=(Spinner) promptsView.findViewById(R.id.spinner_type);
-        final Spinner spinner2=(Spinner) promptsView.findViewById(R.id.spinner_secure);
-        String data_type[]={"Type","Home","Work","Main","Other"};
-        String secure[]={"Privacy","Only Me","Friends","Everyone"};
-        String source_link[]={"Source","LinkedIn","Facebook","Twitter","Google+","Instagram","SnapChat"};
+        final EditText editText = (EditText) promptsView.findViewById(R.id.enterDetail);
+        final Spinner spinner1 = (Spinner) promptsView.findViewById(R.id.spinner_type);
+        final Spinner spinner2 = (Spinner) promptsView.findViewById(R.id.spinner_secure);
+        String data_type[] = { "Type", "Home", "Work", "Main", "Other" };
+        String secure[] = { "Privacy", "Only Me", "Friends", "Everyone" };
+        String source_link[] = { "Source", "LinkedIn", "Facebook", "Twitter", "Google+", "Instagram", "SnapChat" };
 
-        if(infoAbout.equals("Social Link"))
-        {
-            final ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, source_link);
+        if (infoAbout.equals("Social Link")) {
+            final ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(context,
+                    android.R.layout.simple_spinner_item, source_link);
             adapter1.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
             spinner1.setAdapter(adapter1);
             spinner1.setSelection(adapter1.getPosition(type));
-        }
-        else
-        {
-            final ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, data_type);
+        } else {
+            final ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(context,
+                    android.R.layout.simple_spinner_item, data_type);
             adapter1.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
             spinner1.setAdapter(adapter1);
             spinner1.setSelection(adapter1.getPosition(type));
@@ -261,24 +251,22 @@ public class AdapterProfileData extends RecyclerView.Adapter<AdapterProfileData.
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
         alertDialogBuilder.setView(promptsView);
 
-        alertDialogBuilder.setTitle(infoAbout)
-                .setCancelable(false)
+        alertDialogBuilder.setTitle(infoAbout).setCancelable(false)
                 .setPositiveButton("Edit", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
 
-                        //Toast.makeText(context, "Oh Yes", Toast.LENGTH_SHORT).show();
+                        // Toast.makeText(context, "Oh Yes", Toast.LENGTH_SHORT).show();
                         db.child("data").setValue(editText.getText().toString().trim());
                         db.child("type").setValue(spinner1.getSelectedItem().toString().trim());
                         db.child("privacy").setValue(spinner2.getSelectedItem().toString().trim());
                         notifyDataSetChanged();
                         Toast.makeText(context, "Data Updated", Toast.LENGTH_SHORT).show();
                     }
-                })
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                            dialogInterface.cancel();
+                        dialogInterface.cancel();
                     }
                 });
         // create alert dialog

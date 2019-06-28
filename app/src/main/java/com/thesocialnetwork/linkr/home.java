@@ -12,7 +12,6 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -23,7 +22,6 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.Map;
 
-
 public class home extends Fragment {
     View v;
     ImageView i;
@@ -32,11 +30,13 @@ public class home extends Fragment {
     String s;
     private FirebaseAuth mAuth;
     String uid;
-    TextView contacts,chat,requests,profile,about;
+    TextView contacts, chat, requests, profile, about;
+
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        v=inflater.inflate(R.layout.home,container,false);
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
+            @Nullable Bundle savedInstanceState) {
+        v = inflater.inflate(R.layout.home, container, false);
         getActivity().setTitle("Home");
 
         return v;
@@ -98,7 +98,7 @@ public class home extends Fragment {
             @Override
             public void onClick(View view) {
 
-                Intent i=new Intent(getContext(),About.class);
+                Intent i = new Intent(getContext(), About.class);
                 startActivity(i);
             }
         });
@@ -108,8 +108,8 @@ public class home extends Fragment {
 
     private void openChatDialog() {
 
-        final FragmentManager fm=getFragmentManager();
-        final  ChatDialog tv=new ChatDialog();
-        tv.show(fm,"chat_tag");
+        final FragmentManager fm = getFragmentManager();
+        final ChatDialog tv = new ChatDialog();
+        tv.show(fm, "chat_tag");
     }
 }
